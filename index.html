@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Tebak Angka</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f4c2c2;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        #console {
+            background-color: black;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 1.2rem;
+            height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        input[type="text"] {
+            font-family: 'Courier New', Courier, monospace;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 60%;
+            margin-top: 10px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #f44336;
+        }
+
+        button {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #e53935;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #b80000;
+        }
+
+        
+        .win-images {
+            display: none; 
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .win-images img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #f44336;
+            margin: 0 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Game Tebak Angka</h1>
+    <div id="console"></div>
+    <input type="text" id="userInput" placeholder="Tebak angka antara 1 dan 10...">
+    <button onclick="startGame()">Mulai Ulang</button>
+
+    
+    <div class="win-images" id="win-images">
+        <img id="razor-image" src="Razor.png" alt="Razor Image">
+        <img id="nilou-image" src="Nilou.png" alt="Nilou Image">
+    </div>
+
+    <script>
+        let consoleDiv = document.getElementById("console");
+        let userInput = document.getElementById("userInput");
+        let secretNumber;
+        let attempts = 0;
+        let winImages = document.getElementById("win-images"); 
+
+        
+        function printToConsole(message) {
+            consoleDiv.textContent += message + "\n";
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;  
+        }
+
+        
+        function startGame() {
+            attempts = 0;
+            secretNumber = Math.floor(Math.random() * 10) + 1;
+            printToConsole("Selamat datang di game tebak angka dari Matcha! \nTebak angka antara 1 sampai 10.");
+            userInput.value = "";
+            userInput.focus();
+            userInput.addEventListener("keypress", handleInput);
+            winImages.style.display = "none";  
+        }
+
+        
+        function handleInput(event) {
+            if (event.key === "Enter") {
+                let userGuess = parseInt(userInput.value);
+
+                if (isNaN(userGuess) || userGuess < 1 || userGuess > 10) {
+                    printToConsole("❌ Masukkan angka yang kamu tebak.");
+                    userInput.value = "";
+                    return;
+                }
+
+                attempts++;
+                if (userGuess === secretNumber) {
+                    printToConsole(`🎉 YIPPIEEEE kamu berhasil menebak angka dengan benar! Itu adalah angka ${secretNumber}.`);
+                    printToConsole(`Aduhhh kamu butuh ${attempts} kali percobaan.`);
+                    printToConsole("❤️ Terima kasih telah bermain Sayangggg, I Love You!");
+                    winImages.style.display = "block";  
+                    userInput.removeEventListener("keypress", handleInput);
+                } else {
+                    let hint = userGuess < secretNumber ? "Coba angka yang lebih besar." : "Coba angka yang lebih kecil.";
+                    printToConsole(`❌ Tebakan kamu salah. ${hint}`);
+                }
+
+                userInput.value = "";
+            }
+        }
+
+
+        startGame();
+    </script>
+
+</body>
+</html>
